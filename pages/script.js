@@ -145,7 +145,7 @@ function createBoard() {
     color: color,
     folders: [],
   };
-  console.log(newBoard);
+
   allBoards.push(newBoard);
 
   saveData();
@@ -360,9 +360,6 @@ function updateTask() {
         task.dueDate = dueDate + " " + time;
         task.priority = priority;
         task.status = status;
-
-        // Debug: Log the status change
-        console.log(`Task status updated to: ${status}`);
 
         saveData();
 
@@ -590,10 +587,6 @@ function createTaskHTML(boardId, folderId, task) {
   const priorityClass = getPriorityClass(task.priority);
   const statusClass = getStatusClass(task.status);
   const isOverdue = countdown.expired && task.status !== "completed";
-  // Debug: Log the overdue status
-  console.log(
-    `Task: ${task.title}, Status: ${task.status}, Expired: ${countdown.expired}, IsOverdue: ${isOverdue}`
-  );
   const isCompleted = task.status === "completed";
   const isPending = task.status === "pending";
   const isActive = task.status === "active";
