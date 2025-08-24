@@ -80,7 +80,7 @@ function startCountdownTimer() {
       // Check if there's an active search
       const searchInput = document.getElementById("searchInput");
       const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
-      
+
       if (searchTerm) {
         // If there's a search term, re-run the search to update countdowns
         performSearch();
@@ -112,7 +112,7 @@ function clearUserData() {
   if (confirm("Are you sure you want to clear all data?")) {
     localStorage.removeItem("taskManager_" + currentUser);
     allBoards = [];
-    displayBoards();f
+    displayBoards();
     updateStats();
     showNotification("All data cleared!", "success");
   }
@@ -130,15 +130,11 @@ function createBoard() {
   if (!name) {
     showNotification("Please enter board name!", "danger");
     return;
-    }
+  }
 
-
-
- 
   // Check for duplicate board names BEFORE adding the new board
-  if (allBoards.find(b=>b.name===name))
-  {
-    showNotification("You cannot enter 2 board with same name","danger");
+  if (allBoards.find((b) => b.name === name)) {
+    showNotification("You cannot enter 2 board with same name", "danger");
     return;
   }
 
@@ -192,7 +188,7 @@ function createFolder() {
   const board = allBoards.find((b) => b.id === boardId);
 
   // Check for duplicate folder names in this board BEFORE creating the new folder
-  if (board.folders.find(f => f.name === name)) {
+  if (board.folders.find((f) => f.name === name)) {
     showNotification("You cannot enter 2 folder with same name", "danger");
     return;
   }
@@ -395,16 +391,12 @@ function deleteTask(boardId, folderId, taskId) {
         folder.tasks = folder.tasks.filter((task) => task.id !== taskId);
         saveData();
         displayBoards();
-        updateStats(); 
+        updateStats();
         showNotification("Task deleted!", "danger");
       }
     }
   }
 }
-
-
-
-
 
 function editTask(boardId, folderId, taskId) {
   const board = allBoards.find((b) => b.id === boardId);
@@ -437,10 +429,10 @@ function editTask(boardId, folderId, taskId) {
           modalTitle.innerHTML = `
             <i class="fas fa-edit me-2"></i>Edit Task
             <span class="badge ${
-              remainingEdits === 0 
-                ? "bg-danger" 
-                : remainingEdits === 1 
-                ? "bg-warning" 
+              remainingEdits === 0
+                ? "bg-danger"
+                : remainingEdits === 1
+                ? "bg-warning"
                 : "bg-info"
             } ms-2">${remainingEdits} edits left</span>
           `;
@@ -622,8 +614,8 @@ function createTaskHTML(boardId, folderId, task) {
     timeIcon = "fas fa-clock";
     timeClass = "text-warning";
   } else if (
-    countdown.text.includes("h left") &&     //if time is less then 24 hours then convert string into int and dispaly
-    parseInt(countdown.text) < 24    
+    countdown.text.includes("h left") && //if time is less then 24 hours then convert string into int and dispaly
+    parseInt(countdown.text) < 24
   ) {
     timeIcon = "fas fa-hourglass-half";
     timeClass = "text-warning";
@@ -681,12 +673,14 @@ function createTaskHTML(boardId, folderId, task) {
   }</span>
                         <span class="badge ${
                           task.timesUpdated >= 5
-                            ? "bg-danger" 
+                            ? "bg-danger"
                             : task.timesUpdated >= 4
-                            ? "bg-warning" 
+                            ? "bg-warning"
                             : "bg-info"
                         } me-2" title="Edit count">
-                            <i class="fas fa-edit me-1"></i>${5 - task.timesUpdated} edits left
+                            <i class="fas fa-edit me-1"></i>${
+                              5 - task.timesUpdated
+                            } edits left
                         </span>
                         <span class="text-muted small me-2">
                             <i class="fas fa-calendar-plus me-1"></i>Start: ${
@@ -702,18 +696,14 @@ function createTaskHTML(boardId, folderId, task) {
                 </div>
                 <div class="task-actions">
                     <button class="btn btn-sm ${
-                      task.timesUpdated >= 5 
-                        ? "btn-secondary disabled" 
+                      task.timesUpdated >= 5
+                        ? "btn-secondary disabled"
                         : "btn-outline-primary"
                     } me-1" onclick="${
-                      task.timesUpdated >= 5 
-                        ? "showNotification('This task has reached the maximum edit limit of 5 times!', 'danger')" 
-                        : `editTask(${boardId}, ${folderId}, ${task.id})`
-                    }" title="${
-                      task.timesUpdated >= 5
-                        ? "Maximum edits reached" 
-                        : "Edit task"
-                    }">
+    task.timesUpdated >= 5
+      ? "showNotification('This task has reached the maximum edit limit of 5 times!', 'danger')"
+      : `editTask(${boardId}, ${folderId}, ${task.id})`
+  }" title="${task.timesUpdated >= 5 ? "Maximum edits reached" : "Edit task"}">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-sm btn-outline-danger" onclick="deleteTask(${boardId}, ${folderId}, ${
@@ -740,12 +730,6 @@ function getPriorityName(priority) {
   return priorityNames[priority] || priority;
 }
 
-
-
-
-
-
-
 function getStatusName(status) {
   const statusNames = {
     pending: "Pending",
@@ -765,14 +749,12 @@ function calculateCountdown(dueDate) {
     const overdueDiff = Math.abs(diff); //convert negative to positive
     const overdueDays = Math.floor(overdueDiff / (1000 * 60 * 60 * 24));
     const overdueHours = Math.floor(
-      (overdueDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60) 
+      (overdueDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
     );
-          const overdueMinutes = Math.floor(
-        (overdueDiff % (1000 * 60 * 60)) / (1000 * 60)
-      );
-    const overdueSeconds = Math.floor(
-      (overdueDiff % (1000 * 60)) / 1000
+    const overdueMinutes = Math.floor(
+      (overdueDiff % (1000 * 60 * 60)) / (1000 * 60)
     );
+    const overdueSeconds = Math.floor((overdueDiff % (1000 * 60)) / 1000);
 
     if (overdueDays > 0) {
       return {
@@ -785,7 +767,10 @@ function calculateCountdown(dueDate) {
         text: `Overdue by ${overdueHours}h ${overdueMinutes}m ${overdueSeconds}s`,
       };
     } else if (overdueMinutes > 0) {
-      return { expired: true, text: `Overdue by ${overdueMinutes}m ${overdueSeconds}s` };
+      return {
+        expired: true,
+        text: `Overdue by ${overdueMinutes}m ${overdueSeconds}s`,
+      };
     } else if (overdueSeconds > 0) {
       return { expired: true, text: `Overdue by ${overdueSeconds}s` };
     } else {
@@ -797,9 +782,12 @@ function calculateCountdown(dueDate) {
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
- 
+
   if (days > 0) {
-    return { expired: false, text: `${days}d ${hours}h  ${minutes}m ${seconds}s left` };  
+    return {
+      expired: false,
+      text: `${days}d ${hours}h  ${minutes}m ${seconds}s left`,
+    };
   } else if (hours > 0) {
     return { expired: false, text: `${hours}h ${minutes}m  ${seconds}s left` };
   } else if (minutes > 0) {
@@ -863,23 +851,26 @@ function updateStats() {
   document.getElementById("overdueCount").textContent = overdue;
 }
 
-
-
-
-
 // ============================================================================
 // 9. SEARCH FUNCTIONALITY - SIMPLE
 // ============================================================================
 
 function setupSearch() {
   const searchInput = document.getElementById("searchInput");
+  const searchFilter = document.getElementById("searchFilter");
+
   if (searchInput) {
     searchInput.addEventListener("input", performSearch);
+  }
+
+  if (searchFilter) {
+    searchFilter.addEventListener("change", performSearch);
   }
 }
 
 function performSearch() {
   const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+  const searchFilter = document.getElementById("searchFilter").value;
 
   // If no search term, show all boards
   if (!searchTerm) {
@@ -894,55 +885,88 @@ function performSearch() {
   allBoards.forEach((board) => {
     const boardCopy = { ...board, folders: [] };
     let boardMatches = false;
+    let shouldIncludeBoard = false;
 
-    // Check if board name/description matches
+    // Check if board name/description matches (only if searching for boards or all)
     if (
-      board.name.toLowerCase().includes(searchTerm) ||
-      (board.description &&
-        board.description.toLowerCase().includes(searchTerm))
+      (searchFilter === "all" || searchFilter === "boards") &&
+      (board.name.toLowerCase().includes(searchTerm) ||
+        (board.description &&
+          board.description.toLowerCase().includes(searchTerm)))
     ) {
       boardMatches = true;
+      shouldIncludeBoard = true;
     }
 
     // Go through each folder in the board
     board.folders.forEach((folder) => {
       const folderCopy = { ...folder, tasks: [] };
       let folderMatches = false;
+      let shouldIncludeFolder = false;
 
-      // Check if folder name/description matches
+      // Check if folder name/description matches (only if searching for folders or all)
       if (
-        folder.name.toLowerCase().includes(searchTerm) ||
-        (folder.description &&
-          folder.description.toLowerCase().includes(searchTerm))
+        (searchFilter === "all" || searchFilter === "folders") &&
+        (folder.name.toLowerCase().includes(searchTerm) ||
+          (folder.description &&
+            folder.description.toLowerCase().includes(searchTerm)))
       ) {
         folderMatches = true;
+        shouldIncludeFolder = true;
       }
 
       // Go through each task in the folder
       folder.tasks.forEach((task) => {
-        // Check if task title/description matches
+        // Check if task title/description matches (only if searching for tasks or all)
         if (
-          task.title.toLowerCase().includes(searchTerm) ||
-          (task.description &&
-            task.description.toLowerCase().includes(searchTerm))
+          (searchFilter === "all" || searchFilter === "tasks") &&
+          (task.title.toLowerCase().includes(searchTerm) ||
+            (task.description &&
+              task.description.toLowerCase().includes(searchTerm)))
         ) {
           folderCopy.tasks.push(task);
+          shouldIncludeFolder = true;
+          shouldIncludeBoard = true;
         }
       });
 
-      // If board matches, show ALL folders and tasks
-      if (boardMatches) {
-        // Add the complete folder with all tasks
+      // Handle different filter scenarios
+      if (searchFilter === "boards" && boardMatches) {
+        // If searching for boards and board matches, include all folders and tasks
         const completeFolder = { ...folder };
         boardCopy.folders.push(completeFolder);
-      } else if (folderMatches || folderCopy.tasks.length > 0) {
-        // Add folder if it matches or has matching tasks
+        shouldIncludeBoard = true;
+      } else if (searchFilter === "folders" && folderMatches) {
+        // If searching for folders and folder matches, include all tasks in that folder
+        const completeFolderWithTasks = { ...folder };
+        boardCopy.folders.push(completeFolderWithTasks);
+        shouldIncludeBoard = true;
+      } else if (searchFilter === "tasks" && folderCopy.tasks.length > 0) {
+        // If searching for tasks and found matching tasks, include only those tasks
         boardCopy.folders.push(folderCopy);
+        shouldIncludeBoard = true;
+      } else if (searchFilter === "all") {
+        // For "all" filter, use the original logic
+        if (boardMatches) {
+          // If board matches, show all folders and tasks
+          const completeFolder = { ...folder };
+          boardCopy.folders.push(completeFolder);
+        } else if (folderMatches || folderCopy.tasks.length > 0) {
+          // If folder matches or has matching tasks, include them
+          if (folderMatches) {
+            // If folder matches, include all its tasks
+            const completeFolderWithTasks = { ...folder };
+            boardCopy.folders.push(completeFolderWithTasks);
+          } else {
+            // If only tasks match, include only matching tasks
+            boardCopy.folders.push(folderCopy);
+          }
+        }
       }
     });
 
-    // Add board if it matches or has matching folders
-    if (boardMatches || boardCopy.folders.length > 0) {
+    // Add board if it should be included
+    if (shouldIncludeBoard || boardCopy.folders.length > 0) {
       filteredBoards.push(boardCopy);
     }
   });
@@ -998,12 +1022,9 @@ function setDefaultTaskDates() {
   document.getElementById("taskDate").value = tomorrowFormatted;
 }
 
-
-
-
 function showAddFolderModal(boardId) {
   // Find the board to get its name
-  const board = allBoards.find(b => b.id === boardId);
+  const board = allBoards.find((b) => b.id === boardId);
   if (board) {
     // Set the hidden input value
     document.getElementById("folderBoard").value = boardId;
@@ -1015,14 +1036,14 @@ function showAddFolderModal(boardId) {
 
 function showAddTaskModal(boardId, folderId) {
   // Find the board and folder to get their names
-  const board = allBoards.find(b => b.id === boardId);
+  const board = allBoards.find((b) => b.id === boardId);
   if (board) {
-    const folder = board.folders.find(f => f.id === folderId);
+    const folder = board.folders.find((f) => f.id === folderId);
     if (folder) {
       // Set the hidden input values
       document.getElementById("taskBoard").value = boardId;
       document.getElementById("taskFolder").value = folderId;
-      
+
       // Display the board and folder names
       document.getElementById("taskBoardDisplay").textContent = board.name;
       document.getElementById("taskFolderDisplay").textContent = folder.name;
@@ -1052,10 +1073,10 @@ function showNotification(message, type = "info") {
     `;
 
   document.body.appendChild(notification);
-  
 
   setTimeout(() => {
-    if (notification.parentNode) {  // parentNode is js property that gives access to the parent element of the notification
+    if (notification.parentNode) {
+      // parentNode is js property that gives access to the parent element of the notification
       notification.remove();
     }
   }, 2000);
@@ -1075,5 +1096,3 @@ function logout() {
 // ============================================================================
 // 13. EVENT LISTENERS - SIMPLE
 // ============================================================================
-
-
