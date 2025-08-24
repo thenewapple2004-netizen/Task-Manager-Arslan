@@ -353,6 +353,20 @@ function updateTask() {
           );
           return;
         }
+        if (
+          task.title === title &&
+          task.description === description &&
+          task.startDate === startDate &&
+          task.dueDate === dueDate + " " + time &&
+          task.priority === priority &&
+          task.status === status
+        ) {
+          showNotification("No changes detected!", "warning");
+          bootstrap.Modal.getInstance(
+            document.getElementById("editTaskModal")
+          ).hide();
+          return;
+        }
         task.timesUpdated++;
         task.title = title;
         task.description = description;
