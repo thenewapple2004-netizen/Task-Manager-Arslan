@@ -112,7 +112,7 @@ function clearUserData() {
   if (confirm("Are you sure you want to clear all data?")) {
     localStorage.removeItem("taskManager_" + currentUser);
     allBoards = [];
-    displayBoards();
+    displayBoards();f
     updateStats();
     showNotification("All data cleared!", "success");
   }
@@ -136,7 +136,7 @@ function createBoard() {
 
  
   // Check for duplicate board names BEFORE adding the new board
-  if (allBoards.find(b=>b.name==name))
+  if (allBoards.find(b=>b.name===name))
   {
     showNotification("You cannot enter 2 board with same name","danger");
     return;
@@ -149,14 +149,8 @@ function createBoard() {
     color: color,
     folders: [],
   };
-
+  console.log(newBoard);
   allBoards.push(newBoard);
-
-  if(allBoards.length > 3)
-  // {
-  //   showNotification("You cannot create more than 3 boards!","danger");
-  //   return;
-  // }
 
   saveData();
   displayBoards();
