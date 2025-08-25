@@ -62,9 +62,6 @@ function initializeDashboard() {
 
   // Setup search
   setupSearch();
-
-  // Start real-time countdown timer
-  startCountdownTimer();
 }
 
 // ============================================================================
@@ -291,30 +288,6 @@ function createTask() {
     }
   }
 }
-//doubt
-// Real-time countdown timer
-function startCountdownTimer() {
-  // Update countdown every second 
-  setInterval(() => {
-    // Only update if we're on the dashboard page
-    if (document.getElementById("boardsContainer")) {
-      // Check if there's an active search
-      const searchInput = document.getElementById("searchInput");
-      const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
-
-      if (searchTerm) {
-        // If there's a search term, re-run the search to update countdowns
-        performSearch();
-      } else {
-        // If no search, show all boards
-        displayBoards();
-      }
-    }
-  }, 1000); // Update every 1000ms (1 second)
-}
-
-
-
 
 function updateTask() {
   const taskId = parseInt(
@@ -468,7 +441,9 @@ function showUserName() {
   // qyery selector find all the elements that matches the selector
   const elements = document.querySelectorAll("#userDisplay, #welcomeUser");
   elements.forEach((el) => {
-    if (el) el.textContent = currentUser;
+    if (el) {
+      el.textContent = currentUser;
+    }
   });
 }
 
