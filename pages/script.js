@@ -71,47 +71,27 @@ function initializeDashboard() {
 // 3. DATA STORAGE - SIMPLE
 // ============================================================================
 
-// Real-time countdown timer
-function startCountdownTimer() {
-  // Update countdown every second
-  setInterval(() => {
-    // Only update if we're on the dashboard page
-    if (document.getElementById("boardsContainer")) {
-      // Check if there's an active search
-      const searchInput = document.getElementById("searchInput");
-      const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
-
-      if (searchTerm) {
-        // If there's a search term, re-run the search to update countdowns
-        performSearch();
-      } else {
-        // If no search, show all boards
-        displayBoards();
-      }
-    }
-  }, 1000); // Update every 1000ms (1 second)
-}
 
 function saveData() {
   const data = {
     user: currentUser,
-    boards: allBoards,
-  };
-  localStorage.setItem("taskManager_" + currentUser, JSON.stringify(data));
+    boards: allBoards, 
+  };                               
+  localStorage.setItem("taskManager_" + currentUser, JSON.stringify(data)); //object to string
 }
 
 function loadData() {
   const saved = localStorage.getItem("taskManager_" + currentUser);
-  if (saved) {
-    const data = JSON.parse(saved);
-    allBoards = data.boards || [];
+  if (saved) { 
+    const data = JSON.parse(saved); //string to object
+    allBoards = data.boards || []; //if data.boards is not defined, then allBoards will be an empty array
   }
 }
 
 function clearUserData() {
   if (confirm("Are you sure you want to clear all data?")) {
     localStorage.removeItem("taskManager_" + currentUser);
-    allBoards = [];
+    allBoards = []; 
     displayBoards();
     updateStats();
     showNotification("All data cleared!", "success");
@@ -123,7 +103,7 @@ function clearUserData() {
 // ============================================================================
 
 function createBoard() {
-  const name = document.getElementById("boardName").value;
+  const name = document.getElementById("boardName").value;   //.value is used to get the value of the input field
   const description = document.getElementById("boardDescription").value;
   const color = document.getElementById("boardColor").value;
 
@@ -311,6 +291,30 @@ function createTask() {
     }
   }
 }
+//doubt
+// Real-time countdown timer
+function startCountdownTimer() {
+  // Update countdown every second 
+  setInterval(() => {
+    // Only update if we're on the dashboard page
+    if (document.getElementById("boardsContainer")) {
+      // Check if there's an active search
+      const searchInput = document.getElementById("searchInput");
+      const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
+
+      if (searchTerm) {
+        // If there's a search term, re-run the search to update countdowns
+        performSearch();
+      } else {
+        // If no search, show all boards
+        displayBoards();
+      }
+    }
+  }, 1000); // Update every 1000ms (1 second)
+}
+
+
+
 
 function updateTask() {
   const taskId = parseInt(
@@ -484,9 +488,9 @@ function displayBoards() {
     return;
   }
 
-  let html = "";
-  allBoards.forEach((board) => {
-    html += createBoardHTML(board);
+  let html = ""; //empty string
+  allBoards.forEach((board) => {//for each board in allBoards, create a board HTML and add it to the html string
+    html += createBoardHTML(board);  //+= is used to add the board HTML to the html string
   });
   container.innerHTML = html; //
 }
@@ -734,6 +738,7 @@ function getPriorityName(priority) {
     medium: "Medium Priority",
     high: "High Priority",
   };
+
   return priorityNames[priority] || priority;
 }
 
@@ -877,9 +882,9 @@ function setupSearch() {
 
 function performSearch() {
   const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-  const searchFilter = document.getElementById("searchFilter").value;
+  const searchFilter = document.getElementById("searchFilter").value; 
 
-  // If no search term, show all boards
+  // If no search term, show all boards 
   if (!searchTerm) {
     displayBoards();
     return;
@@ -1025,7 +1030,7 @@ function setDefaultTaskDates() {
   const todayFormatted = today.toISOString().split("T")[0];
   const tomorrowFormatted = tomorrow.toISOString().split("T")[0];
 
-  document.getElementById("taskStartDate").value = todayFormatted;
+  document.getElementById("taskStartDate").value = todayFormatted; // todayformatted is the formatted date for today
   document.getElementById("taskDate").value = tomorrowFormatted;
 }
 
