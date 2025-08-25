@@ -64,7 +64,7 @@ function initializeDashboard() {
   setupSearch();
 
   // Start real-time countdown timer
-  startCountdownTimer();
+ 
 }
 
 // ============================================================================
@@ -126,6 +126,8 @@ function createBoard() {
     folders: [],
   };
 
+
+  
   allBoards.push(newBoard);
 
   saveData();
@@ -293,25 +295,25 @@ function createTask() {
 }
 //doubt
 // Real-time countdown timer
-function startCountdownTimer() {
-  // Update countdown every second 
-  setInterval(() => {
-    // Only update if we're on the dashboard page
-    if (document.getElementById("boardsContainer")) {
-      // Check if there's an active search
-      const searchInput = document.getElementById("searchInput");
-      const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
+// function startCountdownTimer() {
+//   // Update countdown every second 
+//   setInterval(() => {
+//     // Only update if we're on the dashboard page
+//     if (document.getElementById("boardsContainer")) {
+//       // Check if there's an active search
+//       const searchInput = document.getElementById("searchInput");
+//       const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
 
-      if (searchTerm) {
-        // If there's a search term, re-run the search to update countdowns
-        performSearch();
-      } else {
-        // If no search, show all boards
-        displayBoards();
-      }
-    }
-  }, 1000); // Update every 1000ms (1 second)
-}
+//       if (searchTerm) {
+//         // If there's a search term, re-run the search to update countdowns
+//         performSearch();
+//       } else {
+//         // If no search, show all boards
+//         displayBoards();
+//       }
+//     }
+//   }, 1000); // Update every 1000ms (1 second)
+// }
 
 
 
@@ -671,7 +673,7 @@ function createTaskHTML(boardId, folderId, task) {
   )}</span>
                         <span class="badge ${
                           isOverdue
-                            ? "bg-danger"
+                            ? "bg-danger"   
                             : isCompleted
                             ? "bg-success"
                             : isActive
@@ -798,18 +800,20 @@ function calculateCountdown(dueDate) {
   if (days > 0) {
     return {
       expired: false,
-      text: `${days}d ${hours}h  ${minutes}m ${seconds}s left`,
+      text: `${days}d ${hours}h  ${minutes}m  left`,
     };
   } else if (hours > 0) {
-    return { expired: false, text: `${hours}h ${minutes}m  ${seconds}s left` };
+    return { expired: false, text: `${hours}h ${minutes}m   left` };
   } else if (minutes > 0) {
-    return { expired: false, text: `${minutes}m ${seconds}s left ` };
+    return { expired: false, text: `${minutes}m left ` };
   } else if (seconds > 0) {
     return { expired: false, text: `${seconds}s left ` };
   } else {
     return { expired: false, text: "Due now" };
   }
-}
+}                                                                    
+
+
 
 function getPriorityClass(priority) {
   switch (priority) {
@@ -818,7 +822,7 @@ function getPriorityClass(priority) {
     case "medium":
       return "bg-warning";
     case "low":
-      return "bg-success";
+      return "bg-success";      
     default:
       return "bg-secondary";
   }
@@ -848,7 +852,7 @@ function updateStats() {
       folder.tasks.forEach((task) => {
         const countdown = calculateCountdown(task.dueDate);
 
-        if (task.status === "pending") pending++;
+        if (task.status === "pending") pending++; 
         else if (task.status === "active") active++;
         else if (task.status === "completed") completed++;
 
