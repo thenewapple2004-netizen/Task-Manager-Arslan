@@ -106,7 +106,6 @@ function createBoard() {
   const name = document.getElementById("boardName").value;   //.value is used to get the value of the input field
   const description = document.getElementById("boardDescription").value;
   const color = document.getElementById("boardColor").value;
-  
 
   if (!name) {
     showNotification("Please enter board name!", "danger");
@@ -323,7 +322,7 @@ function updateTask() {
     for (let folder of board.folders) {
       const task = folder.tasks.find((t) => t.id === taskId);
       if (task) {
-        if (task.timesUpdated >= 3) {
+        if (task.timesUpdated >= 5) {
           showNotification(
             "You cannot update a task more than 5 times!",
             "danger"
@@ -358,7 +357,7 @@ function updateTask() {
         setTimeout(() => {
           displayBoards();
           updateStats();
-        }, 1000);
+        }, 100);
 
         bootstrap.Modal.getInstance(
           document.getElementById("editTaskModal")
@@ -411,7 +410,7 @@ function editTask(boardId, folderId, taskId) {
           .setAttribute("data-task-id", taskId); // setAttribute is a js method set or changes attribute on HTML element
 
         // Update modal title to show edit count
-        const remainingEdits = 3 - task.timesUpdated;
+        const remainingEdits = 5 - task.timesUpdated;
         const modalTitle = document.getElementById("editTaskModalLabel");
         if (modalTitle) {
           modalTitle.innerHTML = `
@@ -472,7 +471,6 @@ function createBoardHTML(board) {
   let foldersHTML = "";
   board.folders.forEach((folder) => {
     foldersHTML += createFolderHTML(board.id, folder);
-       html += createBoardHTML(board);  
   });
 
   // Check if board is empty
@@ -520,7 +518,7 @@ function createBoardHTML(board) {
         `;
 }
 
-function createFolderHTML(boardId, boardfolder) {
+function createFolderHTML(boardId, folder) {
   let tasksHTML = "";
 
   // Sort tasks by priority: high -> medium -> low
@@ -657,14 +655,14 @@ function createTaskHTML(boardId, folderId, task) {
     isOverdue ? "Overdue" : getStatusName(task.status)
   }</span>
                         <span class="badge ${
-                          task.timesUpdated >= 3
+                          task.timesUpdated >= 5
                             ? "bg-danger"
-                            : task.timesUpdated >= 2
+                            : task.timesUpdated >= 4
                             ? "bg-warning"
                             : "bg-info"
                         } me-2" title="Edit count">
                             <i class="fas fa-edit me-1"></i>${
-                              3- task.timesUpdated
+                              5 - task.timesUpdated
                             } edits left
                         </span>
                         <span class="text-muted small me-2">
@@ -681,14 +679,14 @@ function createTaskHTML(boardId, folderId, task) {
                 </div>
                 <div class="task-actions">
                     <button class="btn btn-sm ${
-                      task.timesUpdated >= 3
+                      task.timesUpdated >= 5
                         ? "btn-secondary disabled"
                         : "btn-outline-primary"
                     } me-1" onclick="${
-    task.timesUpdated >= 3
+    task.timesUpdated >= 5
       ? "showNotification('This task has reached the maximum edit limit of 5 times!', 'danger')"
       : `editTask(${boardId}, ${folderId}, ${task.id})`
-  }" title="${task.timesUpdated >= 3 ? "Maximum edits reached" : "Edit task"}">
+  }" title="${task.timesUpdated >= 5 ? "Maximum edits reached" : "Edit task"}">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-sm btn-outline-danger" onclick="deleteTask(${boardId}, ${folderId}, ${
